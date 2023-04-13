@@ -162,10 +162,10 @@
   dependencies:
     xss "^1.0.8"
 
-"@cerc-io/cache@^0.2.34":
-  version "0.2.34"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fcache/-/0.2.34/cache-0.2.34.tgz#92536dbaaac1f4c2606952e4bc6a672ce5bed248"
-  integrity sha512-OZk52zw6dA+ovtqRSzEpNXrSgPO3vXSe52bKC0iI354nRLCKv7ev3LT7PfnECp3jDp7tuowAcmKyLvZPqd3JEw==
+"@cerc-io/cache@^0.2.37":
+  version "0.2.37"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fcache/-/0.2.37/cache-0.2.37.tgz#441b56b6f3de751f0ad1374d2eca198e7bfaa9ba"
+  integrity sha512-8Sgxz+nKSgXF35NKTg2VTVOtRv4EWGkVBQ7lAWDOGcfmi62rkQqDRDDnAR3Y9+AjhLB3rx0sd6ygxa+2pw6pLA==
   dependencies:
     canonical-json "^0.0.4"
     debug "^4.3.1"
@@ -173,13 +173,13 @@
     fs-extra "^10.0.0"
     level "^7.0.0"
 
-"@cerc-io/cli@^0.2.34":
-  version "0.2.34"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fcli/-/0.2.34/cli-0.2.34.tgz#e5f376cc7149ecf54e60537d88be952658c57516"
-  integrity sha512-rnUaXZqoZPlMB+vc22bOOoCGka3zXX7EmAWIfunAGRRa6Mny0/7qK5Mw35/GiqOG27JAe1p05oqt36mNzvDa1Q==
+"@cerc-io/cli@^0.2.37":
+  version "0.2.37"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fcli/-/0.2.37/cli-0.2.37.tgz#e824378f0e4a699aaf6f625d903cb1e4d4c94a98"
+  integrity sha512-LJc/BN9NwTAU2QfrbzvPCpr4tPkm4ihO1My9oaLJvi9tagqZHZpKicXsQLMdLkoITP+3B7HgbM7f0M4Zz7ALow==
   dependencies:
-    "@cerc-io/peer" "^0.2.34"
-    "@cerc-io/util" "^0.2.34"
+    "@cerc-io/peer" "^0.2.37"
+    "@cerc-io/util" "^0.2.37"
     "@ethersproject/providers" "^5.4.4"
     "@graphql-tools/utils" "^9.1.1"
     "@ipld/dag-cbor" "^8.0.0"
@@ -192,13 +192,13 @@
     typeorm "^0.2.32"
     yargs "^17.0.1"
 
-"@cerc-io/ipld-eth-client@^0.2.34":
-  version "0.2.34"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fipld-eth-client/-/0.2.34/ipld-eth-client-0.2.34.tgz#bdac02f21bee89a3b9c9e3c6a8866a73f67b535c"
-  integrity sha512-f5IDoKTqvs0+TH6udnQrEPSwjKFS5F92j7Pbn4SdyqXLdRjUy1eo4i6TNu7e7kHUbVa386Fecp1pjnvQknrwsQ==
+"@cerc-io/ipld-eth-client@^0.2.37":
+  version "0.2.37"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fipld-eth-client/-/0.2.37/ipld-eth-client-0.2.37.tgz#391879c633cfe7240c07c795504e6c0446fe9b4e"
+  integrity sha512-kJtwor+8hYRST6KbgBaPta8qpglq7aMxA+P+6dk+QQg5Ym5My/SoYYaxeCVcifOR4nzl0zWAi01jULZbDrkO6g==
   dependencies:
     "@apollo/client" "^3.7.1"
-    "@cerc-io/cache" "^0.2.34"
+    "@cerc-io/cache" "^0.2.37"
     cross-fetch "^3.1.4"
     debug "^4.3.1"
     ethers "^5.4.4"
@@ -280,10 +280,10 @@
     wherearewe "^2.0.0"
     xsalsa20 "^1.1.0"
 
-"@cerc-io/peer@^0.2.34":
-  version "0.2.34"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fpeer/-/0.2.34/peer-0.2.34.tgz#181b175e028999edaf73be580329e5e3bec53036"
-  integrity sha512-JZZovB2MTihBoyOQwINXP1nETJI6aKzh/aF9sQ6TKVkr/Wo7SABQMWbA/P0CBaz0GmP50k5dU7fm87Npyoe5VQ==
+"@cerc-io/peer@^0.2.37":
+  version "0.2.37"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fpeer/-/0.2.37/peer-0.2.37.tgz#1205997f3e7c57f1d9d8d8e9c777f3072b1762a8"
+  integrity sha512-l/37EfNBUDwf8PmnxAE9ZuCQ5856HYHwHtvdU2IQyKa92xDH7d5g7OoEfgq5EhmqVXiM48U/UBvJC3+ljk3nhg==
   dependencies:
     "@cerc-io/libp2p" "0.42.2-laconic-0.1.3"
     "@cerc-io/prometheus-metrics" "1.1.4"
@@ -321,20 +321,20 @@
     it-stream-types "^1.0.4"
     promjs "^0.4.2"
 
-"@cerc-io/solidity-mapper@^0.2.34":
-  version "0.2.34"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fsolidity-mapper/-/0.2.34/solidity-mapper-0.2.34.tgz#69e487f232725b4d9d791baf29587d1dd2d83abc"
-  integrity sha512-x1VhacWZZ8GBhLzXVFhWdgD6AlzpBPQhnubrIg9CKgsOsW60LOTAo15tMuqYKrXthPbdnAMg0BPf3/O/9sHxoA==
+"@cerc-io/solidity-mapper@^0.2.37":
+  version "0.2.37"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fsolidity-mapper/-/0.2.37/solidity-mapper-0.2.37.tgz#fb990330330f6cac14d4224a49383b140c80e159"
+  integrity sha512-Fgz50cX6kwhapWi7c30nDpe6fekuZlKqcmQb4BxviLgj4YSrzOm2wbYm8VHH2XlZX8f3I9uMafipUJDWHzExmA==
   dependencies:
     dotenv "^10.0.0"
 
-"@cerc-io/util@^0.2.34":
-  version "0.2.34"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Futil/-/0.2.34/util-0.2.34.tgz#3c5dc2e931210e841fa8bb0a6c3b0a456095ff4b"
-  integrity sha512-m479pza2CC3lwBa6o1a54yG/hdA2T/Elx/m02Vwkxx6NgFv+dlEka7d0mEd8SM4/Bm2FUn8ti1HhRfqqW6wsdg==
+"@cerc-io/util@^0.2.37":
+  version "0.2.37"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Futil/-/0.2.37/util-0.2.37.tgz#a395d3665386858bd7b4b6177251f89013be0761"
+  integrity sha512-2KVALYpWTbwfd4kY1ue9tWhmvaN8Y3c7ZW+A2seSbB0F+iO6rz6JfcQooejIcWo17PV91HLJV++Mt7jxhwr5Yg==
   dependencies:
     "@apollo/utils.keyvaluecache" "^1.0.1"
-    "@cerc-io/solidity-mapper" "^0.2.34"
+    "@cerc-io/solidity-mapper" "^0.2.37"
     "@ethersproject/providers" "^5.4.4"
     "@graphql-tools/schema" "^9.0.10"
     "@graphql-tools/utils" "^9.1.1"
@@ -791,33 +791,23 @@
     "@graphql-tools/utils" "8.9.0"
     tslib "^2.4.0"
 
-"@graphql-tools/merge@8.4.0":
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/merge/-/merge-8.4.0.tgz#47fbe5c4b6764276dc35bd19c4e7d3c46d3dc0fc"
-  integrity sha512-3XYCWe0d3I4F1azNj1CdShlbHfTIfiDgj00R9uvFH8tHKh7i1IWN3F7QQYovcHKhayaR6zPok3YYMESYQcBoaA==
+"@graphql-tools/merge@^8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/merge/-/merge-8.4.1.tgz#52879e5f73565f504ceea04fcd9ef90a6e733c62"
+  integrity sha512-hssnPpZ818mxgl5+GfyOOSnnflAxiaTn1A1AojZcIbh4J52sS1Q0gSuBR5VrnUDjuxiqoCotpXdAQl+K+U6KLQ==
   dependencies:
-    "@graphql-tools/utils" "9.2.1"
+    "@graphql-tools/utils" "^9.2.1"
     tslib "^2.4.0"
 
 "@graphql-tools/mock@^8.1.2":
-  version "8.7.19"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/mock/-/mock-8.7.19.tgz#b6c01ecc44074a01d6f472213de5f56fe0a3380c"
-  integrity sha512-LT2boYM+Y1vGFEhzmC7xDFRL8RPG20FbNcuk2/hHGH0Kh8K1hkItvL89tul3Pl7N6xerOnDZ3c3fx7Ls5GuFxA==
+  version "8.7.20"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/mock/-/mock-8.7.20.tgz#c83ae0f1940d194a3982120c9c85f3ac6b4f7f20"
+  integrity sha512-ljcHSJWjC/ZyzpXd5cfNhPI7YljRVvabKHPzKjEs5ElxWu2cdlLGvyNYepApXDsM/OJG/2xuhGM+9GWu5gEAPQ==
   dependencies:
-    "@graphql-tools/schema" "9.0.17"
-    "@graphql-tools/utils" "9.2.1"
+    "@graphql-tools/schema" "^9.0.18"
+    "@graphql-tools/utils" "^9.2.1"
     fast-json-stable-stringify "^2.1.0"
     tslib "^2.4.0"
-
-"@graphql-tools/schema@9.0.17", "@graphql-tools/schema@^9.0.10":
-  version "9.0.17"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/schema/-/schema-9.0.17.tgz#d731e9899465f88d5b9bf69e607ec465bb88b062"
-  integrity sha512-HVLq0ecbkuXhJlpZ50IHP5nlISqH2GbNgjBJhhRzHeXhfwlUOT4ISXGquWTmuq61K0xSaO0aCjMpxe4QYbKTng==
-  dependencies:
-    "@graphql-tools/merge" "8.4.0"
-    "@graphql-tools/utils" "9.2.1"
-    tslib "^2.4.0"
-    value-or-promise "1.0.12"
 
 "@graphql-tools/schema@^8.0.0":
   version "8.5.1"
@@ -829,6 +819,16 @@
     tslib "^2.4.0"
     value-or-promise "1.0.11"
 
+"@graphql-tools/schema@^9.0.10", "@graphql-tools/schema@^9.0.18":
+  version "9.0.18"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/schema/-/schema-9.0.18.tgz#f66dd5e76e1aba85904cb649fde88ae01718c45c"
+  integrity sha512-Kckb+qoo36o5RSIVfBNU5XR5fOg4adNa1xuhhUgbQejDaI684tIJbTWwYbrDPVEGL/dqJJX3rrsq7RLufjNFoQ==
+  dependencies:
+    "@graphql-tools/merge" "^8.4.1"
+    "@graphql-tools/utils" "^9.2.1"
+    tslib "^2.4.0"
+    value-or-promise "1.0.12"
+
 "@graphql-tools/utils@8.9.0":
   version "8.9.0"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.9.0.tgz#c6aa5f651c9c99e1aca55510af21b56ec296cdb7"
@@ -836,7 +836,7 @@
   dependencies:
     tslib "^2.4.0"
 
-"@graphql-tools/utils@9.2.1", "@graphql-tools/utils@^9.1.1":
+"@graphql-tools/utils@^9.1.1", "@graphql-tools/utils@^9.2.1":
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-9.2.1.tgz#1b3df0ef166cfa3eae706e3518b17d5922721c57"
   integrity sha512-WUw506Ql6xzmOORlriNrD6Ugx+HjVgYxt9KCXD9mHAak+eaXSwuGGPyE60hy9xaDEoXKBsG7SkG69ybitaVl6A==
@@ -1708,6 +1708,13 @@
   resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.12.tgz#6b2c510a7ad7039e98e7b8d3d6598f4359e5c080"
   integrity sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==
 
+"@types/debug@^4.1.5":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
+  integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
+  dependencies:
+    "@types/ms" "*"
+
 "@types/express-serve-static-core@4.17.31":
   version "4.17.31"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.31.tgz#a1139efeab4e7323834bb0226e62ac019f474b2f"
@@ -1736,6 +1743,11 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
+"@types/json-bigint@^1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/json-bigint/-/json-bigint-1.0.1.tgz#201062a6990119a8cc18023cfe1fed12fc2fc8a7"
+  integrity sha512-zpchZLNsNuzJHi6v64UBoFWAvQlPhch7XAi36FkH6tL1bbbmimIF+cS7vwkzY4u5RaSWMoflQfu+TshMPPw8uw==
+
 "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
@@ -1760,6 +1772,11 @@
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
   integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
+
+"@types/ms@*":
+  version "0.7.31"
+  resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
+  integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
 "@types/node@*", "@types/node@>=13.7.0":
   version "18.15.11"

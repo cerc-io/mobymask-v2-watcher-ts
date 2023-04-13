@@ -27,20 +27,20 @@
       host = "127.0.0.1"
       port = 9090
       relayPeers = []
-      peerIdFile = '../peer/relay-id.json'
+      peerIdFile = ''
       announce = ''
       enableDebugInfo = true
 
     [server.p2p.peer]
-      relayMultiaddr = '/ip4/127.0.0.1/tcp/9090/ws/p2p/12D3KooWHFhLLaj9ZeZ6amEJRd1yv6T6nTd9pH97Jwde6qnwZ5Sh'
+      relayMultiaddr = ''
       pubSubTopic = 'mobymask'
-      peerIdFile = '../peer/peer-id.json'
+      peerIdFile = ''
       enableDebugInfo = true
       enableL2Txs = false
 
       [server.p2p.peer.l2TxsConfig]
-        privateKey = '142fae3aa4bd0911cfd3dd3214f9136a4f2a111d1aaa48a252e9a19daf94075a'
-        contractAddress = '0xBBC15D791De9f6E46D9C8e221280e8E16022cab7'
+        privateKey = ''
+        contractAddress = ''
 
 [metrics]
   host = "127.0.0.1"
