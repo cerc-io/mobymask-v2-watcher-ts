@@ -1,14 +1,15 @@
 {
-  "name": "@cerc-io/mobymask-v2-watcher",
+  "name": "@cerc-io/mobymask-v2-watcher-ts",
   "version": "0.2.37",
-  "description": "mobymask-v2-watcher",
+  "description": "mobymask-v2-watcher-ts",
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint --max-warnings=0 .",
     "build": "yarn clean && tsc && yarn copy-assets",
     "clean": "rm -rf ./dist",
     "copy-assets": "copyfiles -u 1 src/**/*.gql dist/",
+    "prepare": "husky install",
     "server": "DEBUG='vulcanize:*, laconic:*' YARN_CHILD_PROCESS=true node --enable-source-maps dist/server.js",
     "server:dev": "DEBUG=vulcanize:* YARN_CHILD_PROCESS=true ts-node src/server.ts",
     "job-runner": "DEBUG=vulcanize:* YARN_CHILD_PROCESS=true node --enable-source-maps dist/job-runner.js",
@@ -28,14 +29,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cerc-io/watcher-ts.git"
+    "url": "git+https://github.com/cerc-io/mobymask-v2-watcher-ts.git"
   },
   "author": "",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/cerc-io/watcher-ts/issues"
+    "url": "https://github.com/cerc-io/mobymask-v2-watcher-ts/issues"
   },
-  "homepage": "https://github.com/cerc-io/watcher-ts#readme",
+  "homepage": "https://github.com/cerc-io/mobymask-v2-watcher-ts#readme",
   "dependencies": {
     "@apollo/client": "^3.3.19",
     "@cerc-io/cli": "^0.2.37",
@@ -69,6 +70,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
+    "husky": "^7.0.2",
     "ts-node": "^10.2.1",
     "typescript": "^5.0.2"
   }
