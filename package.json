@@ -41,7 +41,6 @@
     "@apollo/client": "^3.3.19",
     "@cerc-io/cli": "^0.2.39",
     "@cerc-io/ipld-eth-client": "^0.2.39",
-    "@cerc-io/peer": "^0.2.39",
     "@cerc-io/solidity-mapper": "^0.2.39",
     "@cerc-io/util": "^0.2.39",
     "@ethersproject/providers": "^5.4.4",
