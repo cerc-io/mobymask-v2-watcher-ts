@@ -1,6 +1,6 @@
 {
   "name": "@cerc-io/mobymask-v2-watcher-ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "mobymask-v2-watcher-ts",
   "private": true,
   "main": "dist/index.js",
