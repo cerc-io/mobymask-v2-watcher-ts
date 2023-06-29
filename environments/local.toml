@@ -21,7 +21,7 @@
 
   [server.p2p]
     enableRelay = true
-    enablePeer = true
+    enablePeer = false
 
     [server.p2p.relay]
       host = "127.0.0.1"
