@@ -44,6 +44,11 @@
         privateKey = ''
         contractAddress = ''
 
+      [server.p2p.nitro]
+        store = ''
+        privateKey = ''
+        chainPrivateKey = ''
+
 [metrics]
   host = "127.0.0.1"
   port = 9000
