@@ -52,6 +52,7 @@
     "ethers": "^5.4.4",
     "graphql": "^15.5.0",
     "json-bigint": "^1.0.0",
+    "pluralize": "^8.0.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "0.2.37",
     "yargs": "^17.0.1"
