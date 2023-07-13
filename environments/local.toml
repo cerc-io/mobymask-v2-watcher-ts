@@ -39,6 +39,8 @@
       peerIdFile = ''
       enableDebugInfo = true
       enableL2Txs = false
+      pingInterval = 4000
+      pingTimeout = 1500
 
       [server.p2p.peer.l2TxsConfig]
         privateKey = ''
