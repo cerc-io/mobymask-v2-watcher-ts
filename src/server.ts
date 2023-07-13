@@ -11,7 +11,6 @@ import { ethers } from 'ethers';
 
 import { ServerCmd } from '@cerc-io/cli';
 
-// TODO: Publish package
 import {
   P2PMessageService,
   Client,
@@ -20,7 +19,6 @@ import {
   DurableStore
 
 } from '@cerc-io/nitro-client';
-// TODO: Publish package
 import { hex2Bytes } from '@cerc-io/nitro-util';
 
 import { createResolvers } from './resolvers';
