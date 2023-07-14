@@ -280,14 +280,14 @@
     wherearewe "^2.0.0"
     xsalsa20 "^1.1.0"
 
-"@cerc-io/nitro-client@^0.1.0":
-  version "0.1.0"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fnitro-client/-/0.1.0/nitro-client-0.1.0.tgz#ed70d17193979a60d5219ba341990491f9820703"
-  integrity sha512-fLpWj/Mv6kMOrFpN2t7zFajZEdQcArqtbFx+9aMecPzZ0zqInwAr6OIsjck32j5w924SSheZVkfMMu3zTens5g==
+"@cerc-io/nitro-client@^0.1.1":
+  version "0.1.1"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fnitro-client/-/0.1.1/nitro-client-0.1.1.tgz#e0b99f11695750d3306c0e6e7806a686d7a7d14b"
+  integrity sha512-SVzOO+qAC2faNvpFjiK6HdGhg4SLIgVQoj/3NEuzMQSgHie4AQPwiNvZwAIMQJqATJkRLQ6VpA4CLOt5L4Xb9A==
   dependencies:
     "@cerc-io/libp2p" "0.42.2-laconic-0.1.3"
-    "@cerc-io/nitro-util" "^0.1.0"
-    "@cerc-io/peer" "^0.2.45"
+    "@cerc-io/nitro-util" "^0.1.1"
+    "@cerc-io/peer" "^0.2.46"
     "@cerc-io/ts-channel" "1.0.3-ts-nitro-0.1.1"
     "@libp2p/crypto" "^1.0.4"
     "@libp2p/mdns" "^6.0.0"
@@ -304,10 +304,10 @@
     promjs "^0.4.2"
     uint8arrays "^4.0.3"
 
-"@cerc-io/nitro-util@^0.1.0":
-  version "0.1.0"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fnitro-util/-/0.1.0/nitro-util-0.1.0.tgz#f5037b84db3684b71f7eb3fdc1f17ce4aeb4014c"
-  integrity sha512-I40BfqmUwDbpa/Ln/5BH5YwV+i3pgbEapLgzTkQ+kgUbYBK6v9khHx6rCsrlQOz08Q450k7gYKsDMUUFCnDwgQ==
+"@cerc-io/nitro-util@^0.1.1":
+  version "0.1.1"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fnitro-util/-/0.1.1/nitro-util-0.1.1.tgz#54c8e7c46986a628e6b33505eecf88e2f278c2be"
+  integrity sha512-Wxlqu09kc5FtShWgoTL1ZDDZ1EsOegaEzJa06qSfQtkt9HsxkesnZnAvaQWqHZGBJU00NmSCQOcYXKeGDzKB+g==
   dependencies:
     assert "^2.0.0"
     debug "^4.3.4"
@@ -317,7 +317,7 @@
     lodash "^4.17.21"
     uint8arrays "^4.0.3"
 
-"@cerc-io/peer@^0.2.45", "@cerc-io/peer@^0.2.46":
+"@cerc-io/peer@^0.2.46":
   version "0.2.46"
   resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fpeer/-/0.2.46/peer-0.2.46.tgz#b317b35f1e302d8edc660adafbb3d59fcacc2d2a"
   integrity sha512-cd1/b+NlBNYE7H1Cec+Re6RIa1kV0PXt8Ac5oU+uOFHVkKyWqV0MwwdsswkQ4cfkdJ0dgvHmZca7Zqbeu680uA==
