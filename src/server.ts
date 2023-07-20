@@ -17,7 +17,6 @@ import {
   EthChainService,
   PermissivePolicy,
   DurableStore
-
 } from '@cerc-io/nitro-client';
 import { hex2Bytes } from '@cerc-io/nitro-util';
 
@@ -30,7 +29,7 @@ import {
   virtualPaymentAppAddress,
   consensusAppAddress
 } from './nitro-addresses.json';
-import { Config } from '@cerc-io/util';
+import { Config, PaymentsManager } from '@cerc-io/util';
 import { Peer } from '@cerc-io/peer';
 
 const log = debug('vulcanize:server');
@@ -49,21 +48,30 @@ export const main = async (): Promise<any> => {
     p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig);
   }
 
+  let nitroPaymentsManager: PaymentsManager | undefined;
+  if (enablePeer) {
+    nitroPaymentsManager = new PaymentsManager();
+  }
+
   const typeDefs = fs.readFileSync(path.join(__dirname, 'schema.gql')).toString();
-  await serverCmd.exec(createResolvers, typeDefs, p2pMessageHandler);
+  await serverCmd.exec(createResolvers, typeDefs, p2pMessageHandler, nitroPaymentsManager);
 
   if (enablePeer) {
     assert(serverCmd.peer);
-    await setupNitro(serverCmd.config, serverCmd.peer);
+    assert(nitroPaymentsManager);
+
+    const client = await setupNitro(serverCmd.config, serverCmd.peer);
+
+    // Start subscription for payment vouchers received by the client
+    nitroPaymentsManager.subscribeToVouchers(client);
   }
 };
 
-const setupNitro = async (config: Config, peer: Peer): Promise<Client | undefined> => {
+const setupNitro = async (config: Config, peer: Peer): Promise<Client> => {
   // TODO: Use Nitro class from ts-nitro
   const {
     server: {
       p2p: {
-        enablePeer,
         nitro
       }
     },
@@ -73,10 +81,6 @@ const setupNitro = async (config: Config, peer: Peer): Promise<Client | undefine
       }
     }
   } = config;
-
-  if (!enablePeer) {
-    return;
-  }
 
   // TODO: Use serverCmd.peer private key for nitro-client?
   const store = DurableStore.newDurableStore(hex2Bytes(nitro.privateKey), path.resolve(nitro.store));
