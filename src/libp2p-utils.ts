@@ -132,7 +132,11 @@ export async function sendMessageToL2 (
 
 export function parseLibp2pMessage (peerId: string, data: any): void {
   log(`[${getCurrentTime()}] Received a message on mobymask P2P network from peer:`, peerId);
-  const { kind, message } = data;
+
+  // Message envelope includes the payload
+  const {
+    payload: { kind, message }
+  } = data;
 
   switch (kind) {
     case MESSAGE_KINDS.INVOKE: {
