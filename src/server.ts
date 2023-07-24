@@ -61,6 +61,7 @@ export const main = async (): Promise<any> => {
     assert(nitroPaymentsManager);
 
     const client = await setupNitro(serverCmd.config, serverCmd.peer);
+    log(`Nitro client started with address: ${client.address}`);
 
     // Start subscription for payment vouchers received by the client
     nitroPaymentsManager.subscribeToVouchers(client);

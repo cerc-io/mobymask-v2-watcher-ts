@@ -329,12 +329,15 @@ export class Indexer implements IndexerInterface {
   async _getStorageValueRPC (storageLayout: StorageLayout, blockHash: string, contractAddress: string, variable: string, ...mappingKeys: MappingKey[]): Promise<ValueResult> {
     const getStorageAt = async (params: { blockHash: string, contract: string, slot: string }) => {
       const { blockHash, contract, slot } = params;
+      let value;
 
-      // Workaround to get blockNumber instead of blockHash
-      // TODO: Add flag
-      const { number: blockNumber } = await this._ethProvider.getBlock(blockHash);
-
-      const value = await this._ethProvider.getStorageAt(contract, slot, blockNumber);
+      // Use block number if RPC doesn't support blockHash as blockTag param
+      if (this._serverConfig.rpcSupportsBlockHashParam === false) {
+        const { number: blockNumber } = await this._ethProvider.getBlock(blockHash);
+        value = await this._ethProvider.getStorageAt(contract, slot, blockNumber);
+      } else {
+        value = await this._ethProvider.getStorageAt(contract, slot, blockHash);
+      }
 
       return {
         value,
