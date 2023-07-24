@@ -4,7 +4,9 @@
 
 import debug from 'debug';
 import { ethers, Signer } from 'ethers';
+
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers';
+import { getSenderAddress, PaymentsManager } from '@cerc-io/util';
 
 import { abi as PhisherRegistryABI } from './artifacts/PhisherRegistry.json';
 
@@ -24,11 +26,12 @@ export function createMessageToL2Handler (
   { contractAddress, gasLimit }: {
     contractAddress: string,
     gasLimit?: number
-  }
+  },
+  paymentsManager: PaymentsManager
 ) {
   return (peerId: string, data: any): void => {
     log(`[${getCurrentTime()}] Received a message on mobymask P2P network from peer:`, peerId);
-    sendMessageToL2(signer, { contractAddress, gasLimit }, data);
+    sendMessageToL2(signer, { contractAddress, gasLimit }, data, paymentsManager);
   };
 }
 
@@ -38,9 +41,39 @@ export async function sendMessageToL2 (
     contractAddress: string,
     gasLimit?: number
   },
-  data: any
+  data: any,
+  paymentsManager: PaymentsManager
 ): Promise<void> {
-  const { kind, message } = data;
+  // Message envelope includes the payload as well as a payment (to, vhash, vsig)
+  const {
+    payload: { kind, message },
+    payment
+  } = data;
+
+  if (!paymentsManager.clientAddress) {
+    log('Ignoring payload, payments manager not subscribed to vouchers yet');
+    return;
+  }
+
+  // Ignore if the payload is not meant for us
+  if (payment.to === paymentsManager.clientAddress) {
+    log('Ignoring payload not meant for this client');
+    return;
+  }
+
+  // Retrive sender address
+  const senderAddress = getSenderAddress(payment.vhash, payment.vsig);
+
+  // Check for payment voucher received from the sender Nitro account
+  const paymentVoucherRecived = await paymentsManager.authenticateVoucherForSender(payment.vhash, senderAddress);
+
+  if (!paymentVoucherRecived) {
+    log(`Rejecting tx request from ${senderAddress}, payment voucher not received`);
+    return;
+  }
+
+  log(`Serving a paid tx request for ${senderAddress}`);
+
   const contract = new ethers.Contract(contractAddress, PhisherRegistryABI, signer);
   let receipt: TransactionReceipt | undefined;
 
