@@ -19,6 +19,9 @@
   # Use -1 for skipping check on block range.
   maxEventsBlockRange = -1
 
+  # Flag to specify whether RPC endpoint supports block hash as block tag parameter
+  rpcSupportsBlockHashParam = false
+
   [server.p2p]
     enableRelay = true
     enablePeer = false
