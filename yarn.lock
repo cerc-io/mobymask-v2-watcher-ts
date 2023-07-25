@@ -452,10 +452,10 @@
     unique-names-generator "^4.7.1"
     yargs "^17.0.1"
 
-"@cerc-io/peer@^0.2.48":
-  version "0.2.48"
-  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fpeer/-/0.2.48/peer-0.2.48.tgz#fec9ff7a52c9bfe4a2f572f82cbceb9e29e9dcc4"
-  integrity sha512-hFDH86y3MkRxVFRHPdpnFWg7mf+aHqlk0vpd52Pm7Xk4fd4Ns2JXjP7AC8/uKDJbWlQ/JFod0Sn8F3LYuq/ATw==
+"@cerc-io/peer@^0.2.49":
+  version "0.2.49"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fpeer/-/0.2.49/peer-0.2.49.tgz#14868f3b40e1ba820c2a3cf9827a7338efc8fec4"
+  integrity sha512-fe+Iz+ClM6mU8TxxgLRR5XXOZrvskykFPjTtNddU/L9ErZ5PFCVYP5to1HwYSD/l0/shHOuPYU24KPweMffzug==
   dependencies:
     "@cerc-io/libp2p" "0.42.2-laconic-0.1.3"
     "@cerc-io/prometheus-metrics" "1.1.4"
