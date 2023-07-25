@@ -63,17 +63,17 @@ export async function sendMessageToL2 (
   }
 
   // Retrieve sender address
-  const senderAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
+  const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
 
   // Check for payment voucher received from the sender Nitro account
-  const paymentVoucherRecived = await paymentsManager.authenticateVoucher(payment.vhash, senderAddress);
+  const paymentVoucherRecived = await paymentsManager.authenticateVoucher(payment.vhash, signerAddress);
 
   if (!paymentVoucherRecived) {
-    log(`Rejecting tx request from ${senderAddress}, payment voucher not received`);
+    log(`Rejecting tx request from ${signerAddress}, payment voucher not received`);
     return;
   }
 
-  log(`Serving a paid tx request for ${senderAddress}`);
+  log(`Serving a paid tx request for ${signerAddress}`);
 
   const contract = new ethers.Contract(contractAddress, PhisherRegistryABI, signer);
   let receipt: TransactionReceipt | undefined;
