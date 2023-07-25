@@ -303,10 +303,46 @@
     promjs "^0.4.2"
     uint8arrays "^4.0.3"
 
+"@cerc-io/nitro-client@^0.1.4":
+  version "0.1.4"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fnitro-client/-/0.1.4/nitro-client-0.1.4.tgz#7f69fa5fa66beb7eedd6dddc81a29d2589e6d60d"
+  integrity sha512-2onCl2wygbXXhtjdMotRdeOXovFeiCegenE/y4uFKxOX83LpslTx/iK+d6HqcQHW4Kkc2pExu6PBntaPoKVpLA==
+  dependencies:
+    "@cerc-io/libp2p" "0.42.2-laconic-0.1.3"
+    "@cerc-io/nitro-util" "^0.1.4"
+    "@cerc-io/peer" "^0.2.46"
+    "@cerc-io/ts-channel" "1.0.3-ts-nitro-0.1.1"
+    "@libp2p/crypto" "^1.0.4"
+    "@libp2p/tcp" "^6.0.0"
+    "@multiformats/multiaddr" "^11.1.4"
+    "@statechannels/exit-format" "^0.2.0"
+    "@statechannels/nitro-protocol" "^2.0.0-alpha.4"
+    assert "^2.0.0"
+    debug "^4.3.4"
+    ethers "^5.7.2"
+    it-pipe "^2.0.5"
+    level "^8.0.0"
+    lodash "^4.17.21"
+    promjs "^0.4.2"
+    uint8arrays "^4.0.3"
+
 "@cerc-io/nitro-util@^0.1.3":
   version "0.1.3"
   resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fnitro-util/-/0.1.3/nitro-util-0.1.3.tgz#1c640221c3936203e8ccf492e6374b50502d60d3"
   integrity sha512-NTg8RO/3bzGLZie3pavcJJzLeL9gI1RLxwEMVBtRzsZfniDfsu7CTasoEX+hKgyBiZstEoMtGbfpwVmM1IEQBA==
+  dependencies:
+    assert "^2.0.0"
+    debug "^4.3.4"
+    ethers "^5.7.2"
+    it-pipe "^3.0.1"
+    json-bigint "^1.0.0"
+    lodash "^4.17.21"
+    uint8arrays "^4.0.3"
+
+"@cerc-io/nitro-util@^0.1.4":
+  version "0.1.4"
+  resolved "https://git.vdb.to/api/packages/cerc-io/npm/%40cerc-io%2Fnitro-util/-/0.1.4/nitro-util-0.1.4.tgz#101f61692050f0ae850b0a0a12e56252f3ddc5a8"
+  integrity sha512-dqzFA5czCxo/yyAhHMplzRzTyzf52WpU8U+ntZ9zFIfrWPHvHHyDY4YyjA2yVQEWfcyyIZ0GTzf6wDb/kP8dKg==
   dependencies:
     assert "^2.0.0"
     debug "^4.3.4"

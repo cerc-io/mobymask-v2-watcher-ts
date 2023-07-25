@@ -6,7 +6,8 @@ import debug from 'debug';
 import { ethers, Signer } from 'ethers';
 
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers';
-import { getSenderAddress, PaymentsManager } from '@cerc-io/util';
+import { PaymentsManager } from '@cerc-io/util';
+import { utils as nitroUtils } from '@cerc-io/nitro-client';
 
 import { abi as PhisherRegistryABI } from './artifacts/PhisherRegistry.json';
 
@@ -61,11 +62,11 @@ export async function sendMessageToL2 (
     return;
   }
 
-  // Retrive sender address
-  const senderAddress = getSenderAddress(payment.vhash, payment.vsig);
+  // Retrieve sender address
+  const senderAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
 
   // Check for payment voucher received from the sender Nitro account
-  const paymentVoucherRecived = await paymentsManager.authenticateVoucherForSender(payment.vhash, senderAddress);
+  const paymentVoucherRecived = await paymentsManager.authenticateVoucher(payment.vhash, senderAddress);
 
   if (!paymentVoucherRecived) {
     log(`Rejecting tx request from ${senderAddress}, payment voucher not received`);
