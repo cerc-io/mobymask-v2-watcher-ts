@@ -39,18 +39,19 @@ export const main = async (): Promise<any> => {
   await serverCmd.init(Database);
   await serverCmd.initIndexer(Indexer);
 
+  let nitroPaymentsManager: PaymentsManager | undefined;
   let p2pMessageHandler = parseLibp2pMessage;
+
   const { enablePeer, peer: { enableL2Txs, l2TxsConfig } } = serverCmd.config.server.p2p;
 
-  if (enableL2Txs) {
-    assert(l2TxsConfig);
-    const wallet = new ethers.Wallet(l2TxsConfig.privateKey, serverCmd.ethProvider);
-    p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig);
-  }
-
-  let nitroPaymentsManager: PaymentsManager | undefined;
   if (enablePeer) {
     nitroPaymentsManager = new PaymentsManager();
+
+    if (enableL2Txs) {
+      assert(l2TxsConfig);
+      const wallet = new ethers.Wallet(l2TxsConfig.privateKey, serverCmd.ethProvider);
+      p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager);
+    }
   }
 
   const typeDefs = fs.readFileSync(path.join(__dirname, 'schema.gql')).toString();
