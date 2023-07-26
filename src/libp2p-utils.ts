@@ -10,6 +10,7 @@ import { PaymentsManager } from '@cerc-io/util';
 import { utils as nitroUtils } from '@cerc-io/nitro-client';
 
 import { abi as PhisherRegistryABI } from './artifacts/PhisherRegistry.json';
+import { ChainTransactionRates } from './config';
 
 const log = debug('vulcanize:libp2p-utils');
 
@@ -22,17 +23,20 @@ const MESSAGE_KINDS = {
 
 const DEFAULT_GAS_LIMIT = 500000;
 
+const DEFAULT_CHAIN_TX_COST = 100;
+
 export function createMessageToL2Handler (
   signer: Signer,
   { contractAddress, gasLimit }: {
     contractAddress: string,
     gasLimit?: number
   },
-  paymentsManager: PaymentsManager
+  paymentsManager: PaymentsManager,
+  txRates: ChainTransactionRates
 ) {
   return (peerId: string, data: any): void => {
     log(`[${getCurrentTime()}] Received a message on mobymask P2P network from peer:`, peerId);
-    sendMessageToL2(signer, { contractAddress, gasLimit }, data, paymentsManager);
+    sendMessageToL2(signer, { contractAddress, gasLimit }, data, paymentsManager, txRates);
   };
 }
 
@@ -43,7 +47,8 @@ export async function sendMessageToL2 (
     gasLimit?: number
   },
   data: any,
-  paymentsManager: PaymentsManager
+  paymentsManager: PaymentsManager,
+  chainTxRates: ChainTransactionRates
 ): Promise<void> {
   // Message envelope includes the payload as well as a payment (to, vhash, vsig)
   const {
@@ -65,8 +70,18 @@ export async function sendMessageToL2 (
   // Retrieve sender address
   const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
 
+  // Get the configured chain tx cost
+  let chainTxCost: bigint;
+  if (kind in chainTxRates) {
+    chainTxCost = BigInt(chainTxRates[kind as 'invoke' | 'revoke'] ?? DEFAULT_CHAIN_TX_COST);
+  } else {
+    log(`Unknown libp2p message kind: ${kind}`);
+    log(JSON.stringify(message, null, 2));
+    return;
+  }
+
   // Check for payment voucher received from the sender Nitro account
-  const paymentVoucherRecived = await paymentsManager.authenticateVoucher(payment.vhash, signerAddress);
+  const paymentVoucherRecived = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, chainTxCost);
 
   if (!paymentVoucherRecived) {
     log(`Rejecting tx request from ${signerAddress}, payment voucher not received`);

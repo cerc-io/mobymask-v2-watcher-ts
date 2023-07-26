@@ -29,8 +29,10 @@ import {
   virtualPaymentAppAddress,
   consensusAppAddress
 } from './nitro-addresses.json';
-import { Config, PaymentsManager } from '@cerc-io/util';
+import { Config, PaymentsManager, getConfig } from '@cerc-io/util';
 import { Peer } from '@cerc-io/peer';
+
+import { RatesConfig } from './config';
 
 const log = debug('vulcanize:server');
 
@@ -42,15 +44,16 @@ export const main = async (): Promise<any> => {
   let nitroPaymentsManager: PaymentsManager | undefined;
   let p2pMessageHandler = parseLibp2pMessage;
 
-  const { enablePeer, peer: { enableL2Txs, l2TxsConfig } } = serverCmd.config.server.p2p;
+  const { enablePeer, peer: { enableL2Txs, l2TxsConfig }, nitro: { payments } } = serverCmd.config.server.p2p;
 
   if (enablePeer) {
-    nitroPaymentsManager = new PaymentsManager();
+    const ratesConfig: RatesConfig = await getConfig(payments.ratesFile);
+    nitroPaymentsManager = new PaymentsManager(payments, ratesConfig);
 
     if (enableL2Txs) {
       assert(l2TxsConfig);
       const wallet = new ethers.Wallet(l2TxsConfig.privateKey, serverCmd.ethProvider);
-      p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager);
+      p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager, ratesConfig.chainTrasactions);
     }
   }
 

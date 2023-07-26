@@ -1,0 +1,12 @@
+freeGQLQueriesLimit = ''
+
+[gqlQueries]
+  multiNonce = ''
+  _owner = ''
+  isRevoked = ''
+  isPhisher = ''
+  isMember = ''
+
+[chainTrasactions]
+  invoke = ''
+  revoke = ''
