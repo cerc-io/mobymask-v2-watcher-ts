@@ -1,8 +1,8 @@
-freeGqlQueriesLimit = ''
+freeQueriesLimit = ''
 
-freeGqlQueries = ['latestBlock']
+freeQueriesList = []
 
-[gqlQueries]
+[queries]
   multiNonce = ''
   _owner = ''
   isRevoked = ''
