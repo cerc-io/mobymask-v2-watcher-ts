@@ -65,15 +65,24 @@ export async function sendMessageToL2 (
   // Retrieve sender address
   const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
 
-  // Check for payment voucher received from the sender Nitro account
-  const paymentVoucherRecived = await paymentsManager.authenticateVoucher(payment.vhash, signerAddress);
+  // Get the configured mutation cost
+  const mutationRates = paymentsManager.mutationRates;
+  if (kind in mutationRates) {
+    const configuredMutationCost = BigInt(mutationRates[kind as string]);
 
-  if (!paymentVoucherRecived) {
-    log(`Rejecting tx request from ${signerAddress}, payment voucher not received`);
-    return;
+    // Check for payment voucher received from the sender Nitro account
+    const [paymentVoucherReceived, paymentError] = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, configuredMutationCost);
+
+    if (!paymentVoucherReceived) {
+      log(`Rejecting a mutation request from ${signerAddress}: ${paymentError}`);
+      return;
+    }
+
+    log(`Serving a paid mutation request for ${signerAddress}`);
+  } else {
+    // Serve a mutation request for free if rate is not configured
+    log(`Mutation rate not configured for "${kind}", serving a free mutation request to ${signerAddress}`);
   }
-
-  log(`Serving a paid tx request for ${signerAddress}`);
 
   const contract = new ethers.Contract(contractAddress, PhisherRegistryABI, signer);
   let receipt: TransactionReceipt | undefined;

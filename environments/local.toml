@@ -54,6 +54,18 @@
         privateKey = ''
         chainPrivateKey = ''
 
+        [server.p2p.nitro.payments]
+          ratesFile = ''
+          requestTimeoutInSecs = 10
+
+          [server.p2p.nitro.payments.cache]
+            maxAccounts = 1000
+            accountTTLInSecs = 1800
+            maxVouchersPerAccount = 1000
+            voucherTTLInSecs = 300
+            maxPaymentChannels = 10000
+            paymentChannelTTLInSecs = 1800
+
 [metrics]
   host = "127.0.0.1"
   port = 9000
