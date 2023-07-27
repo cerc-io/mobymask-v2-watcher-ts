@@ -23,8 +23,6 @@ const MESSAGE_KINDS = {
 
 const DEFAULT_GAS_LIMIT = 500000;
 
-const DEFAULT_CHAIN_TX_COST = 100;
-
 export function createMessageToL2Handler (
   signer: Signer,
   { contractAddress, gasLimit }: {
@@ -71,24 +69,22 @@ export async function sendMessageToL2 (
   const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
 
   // Get the configured chain tx cost
-  let chainTxCost: bigint;
   if (kind in chainTxRates) {
-    chainTxCost = BigInt(chainTxRates[kind as 'invoke' | 'revoke'] ?? DEFAULT_CHAIN_TX_COST);
+    const configuredChainTxCost = BigInt(chainTxRates[kind as 'invoke' | 'revoke']);
+
+    // Check for payment voucher received from the sender Nitro account
+    const [paymentVoucherReceived, paymentError] = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, configuredChainTxCost);
+
+    if (!paymentVoucherReceived) {
+      log(`Rejecting tx request from ${signerAddress}: ${paymentError}`);
+      return;
+    }
+
+    log(`Serving a paid tx request for ${signerAddress}`);
   } else {
-    log(`Unknown libp2p message kind: ${kind}`);
-    log(JSON.stringify(message, null, 2));
-    return;
+    // Serve a tx request for free if rate is not configured
+    log(`Chain tx rate not configured for "${kind}", serving a free tx request to ${signerAddress}`);
   }
-
-  // Check for payment voucher received from the sender Nitro account
-  const paymentVoucherRecived = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, chainTxCost);
-
-  if (!paymentVoucherRecived) {
-    log(`Rejecting tx request from ${signerAddress}, payment voucher not received`);
-    return;
-  }
-
-  log(`Serving a paid tx request for ${signerAddress}`);
 
   const contract = new ethers.Contract(contractAddress, PhisherRegistryABI, signer);
   let receipt: TransactionReceipt | undefined;
