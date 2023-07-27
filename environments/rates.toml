@@ -1,4 +1,6 @@
-freeGQLQueriesLimit = ''
+freeGqlQueriesLimit = ''
+
+freeGqlQueries = ['latestBlock']
 
 [gqlQueries]
   multiNonce = ''
