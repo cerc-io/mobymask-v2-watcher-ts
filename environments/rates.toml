@@ -1,4 +1,4 @@
-freeQueriesLimit = ''
+freeQueriesLimit = 10
 
 freeQueriesList = []
 

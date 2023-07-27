@@ -16,9 +16,9 @@ import {
   Client,
   EthChainService,
   PermissivePolicy,
-  DurableStore
+  DurableStore,
+  utils
 } from '@cerc-io/nitro-client';
-import { hex2Bytes } from '@cerc-io/nitro-util';
 
 import { createResolvers } from './resolvers';
 import { Indexer } from './indexer';
@@ -87,8 +87,11 @@ const setupNitro = async (config: Config, peer: Peer): Promise<Client> => {
     }
   } = config;
 
+  const signer = new utils.KeySigner(nitro.privateKey);
+  await signer.init();
+
   // TODO: Use serverCmd.peer private key for nitro-client?
-  const store = DurableStore.newDurableStore(hex2Bytes(nitro.privateKey), path.resolve(nitro.store));
+  const store = await DurableStore.newDurableStore(signer, path.resolve(nitro.store));
   const msgService = await P2PMessageService.newMessageService(store.getAddress(), peer);
 
   const chainService = await EthChainService.newEthChainService(
