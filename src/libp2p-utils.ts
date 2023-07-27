@@ -10,7 +10,6 @@ import { PaymentsManager } from '@cerc-io/util';
 import { utils as nitroUtils } from '@cerc-io/nitro-client';
 
 import { abi as PhisherRegistryABI } from './artifacts/PhisherRegistry.json';
-import { ChainTransactionRates } from './config';
 
 const log = debug('vulcanize:libp2p-utils');
 
@@ -29,12 +28,11 @@ export function createMessageToL2Handler (
     contractAddress: string,
     gasLimit?: number
   },
-  paymentsManager: PaymentsManager,
-  txRates: ChainTransactionRates
+  paymentsManager: PaymentsManager
 ) {
   return (peerId: string, data: any): void => {
     log(`[${getCurrentTime()}] Received a message on mobymask P2P network from peer:`, peerId);
-    sendMessageToL2(signer, { contractAddress, gasLimit }, data, paymentsManager, txRates);
+    sendMessageToL2(signer, { contractAddress, gasLimit }, data, paymentsManager);
   };
 }
 
@@ -45,8 +43,7 @@ export async function sendMessageToL2 (
     gasLimit?: number
   },
   data: any,
-  paymentsManager: PaymentsManager,
-  chainTxRates: ChainTransactionRates
+  paymentsManager: PaymentsManager
 ): Promise<void> {
   // Message envelope includes the payload as well as a payment (to, vhash, vsig)
   const {
@@ -68,22 +65,23 @@ export async function sendMessageToL2 (
   // Retrieve sender address
   const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
 
-  // Get the configured chain tx cost
-  if (kind in chainTxRates) {
-    const configuredChainTxCost = BigInt(chainTxRates[kind as 'invoke' | 'revoke']);
+  // Get the configured mutation cost
+  const mutationRates = paymentsManager.mutationRates;
+  if (kind in mutationRates) {
+    const configuredMutationCost = BigInt(mutationRates[kind as string]);
 
     // Check for payment voucher received from the sender Nitro account
-    const [paymentVoucherReceived, paymentError] = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, configuredChainTxCost);
+    const [paymentVoucherReceived, paymentError] = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, configuredMutationCost);
 
     if (!paymentVoucherReceived) {
-      log(`Rejecting tx request from ${signerAddress}: ${paymentError}`);
+      log(`Rejecting a mutation request from ${signerAddress}: ${paymentError}`);
       return;
     }
 
-    log(`Serving a paid tx request for ${signerAddress}`);
+    log(`Serving a paid mutation request for ${signerAddress}`);
   } else {
-    // Serve a tx request for free if rate is not configured
-    log(`Chain tx rate not configured for "${kind}", serving a free tx request to ${signerAddress}`);
+    // Serve a mutation request for free if rate is not configured
+    log(`Mutation rate not configured for "${kind}", serving a free mutation request to ${signerAddress}`);
   }
 
   const contract = new ethers.Contract(contractAddress, PhisherRegistryABI, signer);

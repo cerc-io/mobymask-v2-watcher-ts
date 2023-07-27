@@ -9,6 +9,6 @@ freeGqlQueries = ['latestBlock']
   isPhisher = ''
   isMember = ''
 
-[chainTrasactions]
+[mutations]
   invoke = ''
   revoke = ''

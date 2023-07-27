@@ -53,7 +53,7 @@ export const main = async (): Promise<any> => {
     if (enableL2Txs) {
       assert(l2TxsConfig);
       const wallet = new ethers.Wallet(l2TxsConfig.privateKey, serverCmd.ethProvider);
-      p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager, ratesConfig.chainTrasactions);
+      p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager);
     }
   }
 
