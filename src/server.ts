@@ -11,24 +11,13 @@ import { ethers } from 'ethers';
 
 import { ServerCmd } from '@cerc-io/cli';
 
-import {
-  P2PMessageService,
-  Client,
-  EthChainService,
-  PermissivePolicy,
-  DurableStore,
-  utils
-} from '@cerc-io/nitro-client';
+import { utils } from '@cerc-io/nitro-client';
 
 import { createResolvers } from './resolvers';
 import { Indexer } from './indexer';
 import { Database } from './database';
 import { createMessageToL2Handler, parseLibp2pMessage } from './libp2p-utils';
-import {
-  nitroAdjudicatorAddress,
-  virtualPaymentAppAddress,
-  consensusAppAddress
-} from './nitro-addresses.json';
+import contractAddresses from './nitro-addresses.json';
 import { Config, PaymentsManager, getConfig } from '@cerc-io/util';
 import { Peer } from '@cerc-io/peer';
 
@@ -64,16 +53,15 @@ export const main = async (): Promise<any> => {
     assert(serverCmd.peer);
     assert(nitroPaymentsManager);
 
-    const client = await setupNitro(serverCmd.config, serverCmd.peer);
-    log(`Nitro client started with address: ${client.address}`);
+    const nitro = await setupNitro(serverCmd.config, serverCmd.peer);
+    log(`Nitro client started with address: ${nitro.client.address}`);
 
     // Start subscription for payment vouchers received by the client
-    nitroPaymentsManager.subscribeToVouchers(client);
+    nitroPaymentsManager.subscribeToVouchers(nitro.client);
   }
 };
 
-const setupNitro = async (config: Config, peer: Peer): Promise<Client> => {
-  // TODO: Use Nitro class from ts-nitro
+const setupNitro = async (config: Config, peer: Peer): Promise<utils.Nitro> => {
   const {
     server: {
       p2p: {
@@ -87,27 +75,13 @@ const setupNitro = async (config: Config, peer: Peer): Promise<Client> => {
     }
   } = config;
 
-  const signer = new utils.KeySigner(nitro.privateKey);
-  await signer.init();
-
-  // TODO: Use serverCmd.peer private key for nitro-client?
-  const store = await DurableStore.newDurableStore(signer, path.resolve(nitro.store));
-  const msgService = await P2PMessageService.newMessageService(store.getAddress(), peer);
-
-  const chainService = await EthChainService.newEthChainService(
+  return utils.Nitro.setupClient(
+    nitro.privateKey,
     rpcProviderEndpoint,
     nitro.chainPrivateKey,
-    nitroAdjudicatorAddress,
-    consensusAppAddress,
-    virtualPaymentAppAddress
-  );
-
-  return Client.new(
-    msgService,
-    chainService,
-    store,
-    undefined,
-    new PermissivePolicy()
+    contractAddresses,
+    peer,
+    path.resolve(nitro.store)
   );
 };
 

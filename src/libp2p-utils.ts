@@ -62,7 +62,7 @@ export async function sendMessageToL2 (
     return;
   }
 
-  // Retrieve sender address
+  // Retrieve signer address
   const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
 
   // Get the configured mutation cost
