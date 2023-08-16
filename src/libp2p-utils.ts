@@ -7,7 +7,7 @@ import { ethers, Signer } from 'ethers';
 
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers';
 import { PaymentsManager } from '@cerc-io/util';
-import { utils as nitroUtils } from '@cerc-io/nitro-client';
+import { utils as nitroUtils } from '@cerc-io/nitro-node';
 
 import { abi as PhisherRegistryABI } from './artifacts/PhisherRegistry.json';
 

@@ -10,7 +10,6 @@ import { ethers } from 'ethers';
 
 import { JsonFragment } from '@ethersproject/abi';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { EthClient } from '@cerc-io/ipld-eth-client';
 import { MappingKey, StorageLayout, getStorageValue } from '@cerc-io/solidity-mapper';
 import {
   Indexer as BaseIndexer,
@@ -29,7 +28,8 @@ import {
   ResultEvent,
   getResultEvent,
   DatabaseInterface,
-  Clients
+  Clients,
+  EthClient
 } from '@cerc-io/util';
 
 import PhisherRegistryArtifacts from './artifacts/PhisherRegistry.json';
