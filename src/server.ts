@@ -13,12 +13,12 @@ import { ServerCmd } from '@cerc-io/cli';
 
 import {
   P2PMessageService,
-  Client,
+  Node,
   EthChainService,
   PermissivePolicy,
   DurableStore,
   utils
-} from '@cerc-io/nitro-client';
+} from '@cerc-io/nitro-node';
 
 import { createResolvers } from './resolvers';
 import { Indexer } from './indexer';
@@ -72,7 +72,7 @@ export const main = async (): Promise<any> => {
   }
 };
 
-const setupNitro = async (config: Config, peer: Peer): Promise<Client> => {
+const setupNitro = async (config: Config, peer: Peer): Promise<Node> => {
   // TODO: Use Nitro class from ts-nitro
   const {
     server: {
@@ -102,7 +102,7 @@ const setupNitro = async (config: Config, peer: Peer): Promise<Client> => {
     virtualPaymentAppAddress
   );
 
-  return Client.new(
+  return Node.new(
     msgService,
     chainService,
     store,
