@@ -30,6 +30,7 @@
       denyMultiaddrs = []
       peerIdFile = ''
       announce = ''
+      pubsub = ''
       enableDebugInfo = true
 
     [server.p2p.peer]
@@ -37,6 +38,7 @@
       denyMultiaddrs = []
       pubSubTopic = 'mobymask'
       peerIdFile = ''
+      pubsub = ''
       enableDebugInfo = true
       enableL2Txs = false
 
