@@ -30,10 +30,56 @@ export function createMessageToL2Handler (
   },
   paymentsManager: PaymentsManager
 ) {
-  return (peerId: string, data: any): void => {
+  return async (peerId: string, data: any): Promise<void> => {
     log(`[${getCurrentTime()}] Received a message on mobymask P2P network from peer:`, peerId);
-    sendMessageToL2(signer, { contractAddress, gasLimit }, data, paymentsManager);
+
+    // Message envelope includes the payload as well as a payment (vhash, vsig)
+    const { payload, payment } = data;
+
+    // TODO: Check payment status before sending tx to l2
+    await handlePayment(paymentsManager, payment, payload.kind);
+
+    sendMessageToL2(signer, { contractAddress, gasLimit }, payload);
   };
+}
+
+export async function handlePayment (
+  paymentsManager: PaymentsManager,
+  payment: { vhash: string, vsig: string },
+  requestKind: string
+): Promise<boolean> {
+  // paymentsManager.clientAddress gets initialized when the payments manager is subscribed to vouchers
+  if (!paymentsManager.clientAddress) {
+    log('Payments manager not subscribed to vouchers yet');
+    return false;
+  }
+
+  // Retrieve sender address
+  const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
+
+  // Get the configured mutation cost
+  const mutationRates = paymentsManager.mutationRates;
+  if (requestKind in mutationRates) {
+    const configuredMutationCost = BigInt(mutationRates[requestKind as string]);
+
+    // Check for payment voucher received from the sender Nitro account
+    const [paymentVoucherReceived, paymentError] = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, configuredMutationCost);
+
+    if (!paymentVoucherReceived) {
+      // log(`Rejecting a mutation request from ${signerAddress}: ${paymentError}`);
+      log(paymentError);
+      return false;
+    }
+
+    // log(`Serving a paid mutation request for ${signerAddress}`);
+    log(`Payment received for a mutation request from ${signerAddress}`);
+    return true;
+  } else {
+    // Serve a mutation request for free if rate is not configured
+    // log(`Mutation rate not configured for "${requestKind}", serving a free mutation request to ${signerAddress}`);
+    log(`Mutation rate not configured for "${requestKind}"`);
+    return true;
+  }
 }
 
 export async function sendMessageToL2 (
@@ -42,47 +88,9 @@ export async function sendMessageToL2 (
     contractAddress: string,
     gasLimit?: number
   },
-  data: any,
-  paymentsManager: PaymentsManager
+  data: any
 ): Promise<void> {
-  // Message envelope includes the payload as well as a payment (to, vhash, vsig)
-  const {
-    payload: { kind, message },
-    payment
-  } = data;
-
-  if (!paymentsManager.clientAddress) {
-    log('Ignoring payload, payments manager not subscribed to vouchers yet');
-    return;
-  }
-
-  // Ignore if the payload is not meant for us
-  if (payment.to === paymentsManager.clientAddress) {
-    log('Ignoring payload not meant for this client');
-    return;
-  }
-
-  // Retrieve sender address
-  const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
-
-  // Get the configured mutation cost
-  const mutationRates = paymentsManager.mutationRates;
-  if (kind in mutationRates) {
-    const configuredMutationCost = BigInt(mutationRates[kind as string]);
-
-    // Check for payment voucher received from the sender Nitro account
-    const [paymentVoucherReceived, paymentError] = await paymentsManager.authenticatePayment(payment.vhash, signerAddress, configuredMutationCost);
-
-    if (!paymentVoucherReceived) {
-      log(`Rejecting a mutation request from ${signerAddress}: ${paymentError}`);
-      return;
-    }
-
-    log(`Serving a paid mutation request for ${signerAddress}`);
-  } else {
-    // Serve a mutation request for free if rate is not configured
-    log(`Mutation rate not configured for "${kind}", serving a free mutation request to ${signerAddress}`);
-  }
+  const { kind, message } = data;
 
   const contract = new ethers.Contract(contractAddress, PhisherRegistryABI, signer);
   let receipt: TransactionReceipt | undefined;
