@@ -4,9 +4,10 @@
 
 import debug from 'debug';
 import { ethers, Signer } from 'ethers';
+import assert from 'assert';
 
 import { TransactionReceipt, TransactionResponse } from '@ethersproject/providers';
-import { PaymentsManager } from '@cerc-io/util';
+import { PaymentsManager, Consensus } from '@cerc-io/util';
 import { utils as nitroUtils } from '@cerc-io/nitro-node';
 
 import { abi as PhisherRegistryABI } from './artifacts/PhisherRegistry.json';
@@ -28,7 +29,8 @@ export function createMessageToL2Handler (
     contractAddress: string,
     gasLimit?: number
   },
-  paymentsManager: PaymentsManager
+  paymentsManager: PaymentsManager,
+  consensus: Consensus
 ) {
   return async (peerId: string, data: any): Promise<void> => {
     log(`[${getCurrentTime()}] Received a message on mobymask P2P network from peer:`, peerId);
@@ -39,7 +41,7 @@ export function createMessageToL2Handler (
     // TODO: Check payment status before sending tx to l2
     await handlePayment(paymentsManager, payment, payload.kind);
 
-    sendMessageToL2(signer, { contractAddress, gasLimit }, payload);
+    sendMessageToL2(consensus, signer, { contractAddress, gasLimit }, payload);
   };
 }
 
@@ -48,11 +50,7 @@ export async function handlePayment (
   payment: { vhash: string, vsig: string },
   requestKind: string
 ): Promise<boolean> {
-  // paymentsManager.clientAddress gets initialized when the payments manager is subscribed to vouchers
-  if (!paymentsManager.clientAddress) {
-    log('Payments manager not subscribed to vouchers yet');
-    return false;
-  }
+  assert(paymentsManager.clientAddress);
 
   // Retrieve sender address
   const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
@@ -83,6 +81,7 @@ export async function handlePayment (
 }
 
 export async function sendMessageToL2 (
+  consensus: Consensus,
   signer: Signer,
   { contractAddress, gasLimit = DEFAULT_GAS_LIMIT }: {
     contractAddress: string,
