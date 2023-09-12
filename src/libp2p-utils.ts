@@ -89,6 +89,12 @@ export async function sendMessageToL2 (
   },
   data: any
 ): Promise<void> {
+  // Send tx to L2 only if we are the leader
+  if (!consensus.isLeader()) {
+    log('Not a leader, skipped sending L2 tx');
+    return;
+  }
+
   const { kind, message } = data;
 
   const contract = new ethers.Contract(contractAddress, PhisherRegistryABI, signer);
