@@ -30,7 +30,7 @@ export function createMessageToL2Handler (
     gasLimit?: number
   },
   paymentsManager: PaymentsManager,
-  consensus: Consensus
+  consensus?: Consensus
 ) {
   return async (peerId: string, data: any): Promise<void> => {
     log(`[${getCurrentTime()}] Received a message on mobymask P2P network from peer:`, peerId);
@@ -41,7 +41,7 @@ export function createMessageToL2Handler (
     // TODO: Check payment status before sending tx to l2
     await handlePayment(paymentsManager, payment, payload.kind);
 
-    sendMessageToL2(consensus, signer, { contractAddress, gasLimit }, payload);
+    sendMessageToL2(signer, { contractAddress, gasLimit }, payload, consensus);
   };
 }
 
@@ -81,16 +81,16 @@ export async function handlePayment (
 }
 
 export async function sendMessageToL2 (
-  consensus: Consensus,
   signer: Signer,
   { contractAddress, gasLimit = DEFAULT_GAS_LIMIT }: {
     contractAddress: string,
     gasLimit?: number
   },
-  data: any
+  data: any,
+  consensus?: Consensus
 ): Promise<void> {
-  // Send tx to L2 only if we are the leader
-  if (!consensus.isLeader()) {
+  // If consensus is setup, send tx to L2 only if we are the leader
+  if (consensus && !consensus.isLeader()) {
     log('Not a leader, skipped sending L2 tx');
     return;
   }

@@ -32,32 +32,31 @@ export const main = async (): Promise<any> => {
   await serverCmd.initIndexer(Indexer);
 
   // Initialize / start the p2p nodes
-  await serverCmd.initP2P();
-
-  // Initialize / start the consensus engine
-  await serverCmd.initConsensus();
+  const [, peer] = await serverCmd.initP2P();
 
   // Initialize / start the Nitro node
-  await serverCmd.initNitro({
+  const nitro = await serverCmd.initNitro({
     nitroAdjudicatorAddress,
     consensusAppAddress,
     virtualPaymentAppAddress
   });
 
+  // Initialize / start the consensus engine
+  const consensus = await serverCmd.initConsensus();
+
   let nitroPaymentsManager: PaymentsManager | undefined;
   const { enablePeer, peer: { enableL2Txs, l2TxsConfig, pubSubTopic }, nitro: { payments } } = serverCmd.config.server.p2p;
 
   if (enablePeer) {
-    assert(serverCmd.peer);
-    assert(serverCmd.nitro);
-    assert(serverCmd.consensus);
+    assert(peer);
+    assert(nitro);
 
     // Setup the payments manager if peer is enabled
     const ratesConfig: RatesConfig = await getConfig(payments.ratesFile);
     nitroPaymentsManager = new PaymentsManager(payments, ratesConfig);
 
     // Start subscription for payment vouchers received by the client
-    nitroPaymentsManager.subscribeToVouchers(serverCmd.nitro);
+    nitroPaymentsManager.subscribeToVouchers(nitro);
 
     // Register the pubsub topic handler
     let p2pMessageHandler = parseLibp2pMessage;
@@ -66,10 +65,10 @@ export const main = async (): Promise<any> => {
     if (enableL2Txs) {
       assert(l2TxsConfig);
       const wallet = new ethers.Wallet(l2TxsConfig.privateKey, serverCmd.ethProvider);
-      p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager, serverCmd.consensus);
+      p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager, consensus);
     }
 
-    serverCmd.peer.subscribeTopic(pubSubTopic, (peerId, data) => {
+    peer.subscribeTopic(pubSubTopic, (peerId, data) => {
       p2pMessageHandler(peerId.toString(), data);
     });
   }
