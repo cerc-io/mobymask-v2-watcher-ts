@@ -32,7 +32,7 @@ export const main = async (): Promise<any> => {
   await serverCmd.initIndexer(Indexer);
 
   // Initialize / start the p2p nodes
-  const [, peer] = await serverCmd.initP2P();
+  const { peer } = await serverCmd.initP2P();
 
   // Initialize / start the Nitro node
   const nitro = await serverCmd.initNitro({
