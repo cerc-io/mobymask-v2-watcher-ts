@@ -39,9 +39,10 @@ export function createMessageToL2Handler (
     const { payload, payment } = data;
 
     // TODO: Check payment status before sending tx to l2
-    await handlePayment(paymentsManager, payment, payload.kind);
-
-    sendMessageToL2(signer, { contractAddress, gasLimit }, payload, consensus);
+    await Promise.all([
+      handlePayment(paymentsManager, payment, payload.kind),
+      sendMessageToL2(signer, { contractAddress, gasLimit }, payload, consensus)
+    ]);
   };
 }
 
