@@ -97,6 +97,10 @@
     rpcProviderEndpoint = "http://127.0.0.1:8545"
     rpcProviderMutationEndpoint = "http://127.0.0.1:8545"
 
+    [upstream.ethServer.rpcProviderNitroNode]
+      address = ""
+      multiAddr = ""
+
   [upstream.cache]
     name = "requests"
     enabled = false
