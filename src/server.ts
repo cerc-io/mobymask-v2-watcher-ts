@@ -7,7 +7,7 @@ import path from 'path';
 import assert from 'assert';
 import 'reflect-metadata';
 import debug from 'debug';
-import { ethers } from 'ethers';
+import { ethers, providers } from 'ethers';
 
 import { ServerCmd } from '@cerc-io/cli';
 
@@ -46,6 +46,7 @@ export const main = async (): Promise<any> => {
 
   let nitroPaymentsManager: PaymentsManager | undefined;
   const { enablePeer, peer: { enableL2Txs, l2TxsConfig, pubSubTopic }, nitro: { payments } } = serverCmd.config.server.p2p;
+  const { rpcProviderMutationEndpoint } = serverCmd.config.upstream.ethServer;
 
   if (enablePeer) {
     assert(peer);
@@ -64,7 +65,12 @@ export const main = async (): Promise<any> => {
     // Send L2 txs for messages if enabled
     if (enableL2Txs) {
       assert(l2TxsConfig);
-      const wallet = new ethers.Wallet(l2TxsConfig.privateKey, serverCmd.ethProvider);
+      // Create a separate provider for mutation requests if rpcProviderMutationEndpoint is provided
+      const mutationProvider = rpcProviderMutationEndpoint
+        ? new providers.JsonRpcProvider(rpcProviderMutationEndpoint)
+        : serverCmd.ethProvider;
+      const wallet = new ethers.Wallet(l2TxsConfig.privateKey, mutationProvider);
+
       p2pMessageHandler = createMessageToL2Handler(wallet, l2TxsConfig, nitroPaymentsManager, consensus);
     }
 
