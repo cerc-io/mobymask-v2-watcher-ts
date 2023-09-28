@@ -9,7 +9,13 @@ import { PaymentsManager } from '@cerc-io/util';
 import { deepCopy } from '@ethersproject/properties';
 import { fetchJson } from '@ethersproject/web';
 
-const log = debug('vulcanize:payment-utils')
+const log = debug('vulcanize:payment-utils');
+
+// TODO: Configure
+const paidRPCMethods = [
+  'eth_getBlockByHash',
+  'eth_getStorageAt'
+];
 
 export async function setupProviderWithPayments (provider: providers.JsonRpcProvider, paymentsManager: PaymentsManager, paymentAmount: string): Promise<void> {
   // https://github.com/ethers-io/ethers.js/blob/v5.7.2/packages/providers/src.ts/json-rpc-provider.ts#L502
@@ -38,11 +44,13 @@ export async function setupProviderWithPayments (provider: providers.JsonRpcProv
     }
 
     // Send a payment to upstream Nitro node and add details to the request URL
-    const voucher = await paymentsManager.sendUpstreamPayment(paymentAmount);
-    const defaultURL = provider.connection.url;
-    const urlWithPayment = `${defaultURL}?channelId=${voucher.channelId}&amount=${voucher.amount}&signature=${voucher.signature}`;
+    let updatedURL = `${provider.connection.url}?method=${method}`;
+    if (paidRPCMethods.includes(method)) {
+      const voucher = await paymentsManager.sendUpstreamPayment(paymentAmount);
+      updatedURL = `${updatedURL}&channelId=${voucher.channelId}&amount=${voucher.amount}&signature=${voucher.signature}`;
+    }
 
-    const result = fetchJson({ ...provider.connection, url: urlWithPayment }, JSON.stringify(request), getResult).then((result) => {
+    const result = fetchJson({ ...provider.connection, url: updatedURL }, JSON.stringify(request), getResult).then((result) => {
       provider.emit('debug', {
         action: 'response',
         request: request,
