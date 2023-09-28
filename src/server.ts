@@ -23,6 +23,7 @@ import {
 import { PaymentsManager, getConfig } from '@cerc-io/util';
 
 import { RatesConfig } from './config';
+import { setupProviderWithPayments } from './payment-utils';
 
 const log = debug('vulcanize:server');
 
@@ -60,8 +61,11 @@ export const main = async (): Promise<any> => {
     nitroPaymentsManager.subscribeToVouchers();
 
     // Setup a payment channel with the upstream Nitro node if provided in config
+    // Setup the provider to send payment with each request
     if (rpcProviderNitroNode) {
       nitroPaymentsManager.setupUpstreamPaymentChannel(rpcProviderNitroNode);
+
+      setupProviderWithPayments(serverCmd.ethProvider, nitroPaymentsManager, rpcProviderNitroNode.amount);
     }
 
     // Register the pubsub topic handler

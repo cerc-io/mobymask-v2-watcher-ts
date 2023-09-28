@@ -51,7 +51,7 @@ export async function handlePayment (
   payment: { vhash: string, vsig: string },
   requestKind: string
 ): Promise<boolean> {
-  assert(paymentsManager.clientAddress);
+  assert(paymentsManager.nitro);
 
   // Retrieve sender address
   const signerAddress = nitroUtils.getSignerAddress(payment.vhash, payment.vsig);
