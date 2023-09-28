@@ -2,15 +2,20 @@
 // Copyright 2023 Vulcanize, Inc.
 //
 
+import debug from 'debug';
 import { providers } from 'ethers';
 
 import { PaymentsManager } from '@cerc-io/util';
 import { deepCopy } from '@ethersproject/properties';
 import { fetchJson } from '@ethersproject/web';
 
+const log = debug('vulcanize:payment-utils')
+
 export async function setupProviderWithPayments (provider: providers.JsonRpcProvider, paymentsManager: PaymentsManager, paymentAmount: string): Promise<void> {
   // https://github.com/ethers-io/ethers.js/blob/v5.7.2/packages/providers/src.ts/json-rpc-provider.ts#L502
   provider.send = async (method: string, params: Array<any>): Promise<any> => {
+    log(`Making RPC call: ${method}`);
+
     const request = {
       method: method,
       params: params,
