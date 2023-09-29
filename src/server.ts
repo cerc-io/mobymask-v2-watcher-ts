@@ -47,7 +47,7 @@ export const main = async (): Promise<any> => {
 
   let nitroPaymentsManager: PaymentsManager | undefined;
   const { enablePeer, peer: { enableL2Txs, l2TxsConfig, pubSubTopic }, nitro: { payments } } = serverCmd.config.server.p2p;
-  const { rpcProviderMutationEndpoint, rpcProviderNitroNode } = serverCmd.config.upstream.ethServer;
+  const { rpcProviderMutationEndpoint, rpcProviderNitroNode, paidRPCMethods } = serverCmd.config.upstream.ethServer;
 
   if (enablePeer) {
     assert(peer);
@@ -65,7 +65,7 @@ export const main = async (): Promise<any> => {
     if (rpcProviderNitroNode?.address) {
       nitroPaymentsManager.setupUpstreamPaymentChannel(rpcProviderNitroNode);
 
-      setupProviderWithPayments(serverCmd.ethProvider, nitroPaymentsManager, rpcProviderNitroNode.amount);
+      setupProviderWithPayments(paidRPCMethods, serverCmd.ethProvider, nitroPaymentsManager, rpcProviderNitroNode.amount);
     }
 
     // Register the pubsub topic handler

@@ -11,13 +11,7 @@ import { fetchJson } from '@ethersproject/web';
 
 const log = debug('vulcanize:payment-utils');
 
-// TODO: Configure
-const paidRPCMethods = [
-  'eth_getBlockByHash',
-  'eth_getStorageAt'
-];
-
-export async function setupProviderWithPayments (provider: providers.JsonRpcProvider, paymentsManager: PaymentsManager, paymentAmount: string): Promise<void> {
+export async function setupProviderWithPayments (paidRPCMethods: string[], provider: providers.JsonRpcProvider, paymentsManager: PaymentsManager, paymentAmount: string): Promise<void> {
   // https://github.com/ethers-io/ethers.js/blob/v5.7.2/packages/providers/src.ts/json-rpc-provider.ts#L502
   provider.send = async (method: string, params: Array<any>): Promise<any> => {
     log(`Making RPC call: ${method}`);

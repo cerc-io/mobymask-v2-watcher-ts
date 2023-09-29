@@ -96,6 +96,7 @@
     gqlApiEndpoint = "http://127.0.0.1:8082/graphql"
     rpcProviderEndpoint = "http://127.0.0.1:8081"
     rpcProviderMutationEndpoint = "http://127.0.0.1:8545"
+    paidRPCMethods=[]
 
     [upstream.ethServer.rpcProviderNitroNode]
       address = ""
