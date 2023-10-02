@@ -98,7 +98,7 @@
     rpcProviderMutationEndpoint = "http://127.0.0.1:8545"
     paidRPCMethods=[]
 
-    [upstream.ethServer.rpcProviderNitroNode]
+    [upstream.ethServer.nitro]
       address = ""
       multiAddr = ""
       amount = "5000"
