@@ -659,8 +659,7 @@ export class Indexer implements IndexerInterface {
     // const { block } = await this._ethClient.getBlockByHash();
 
     // Use ETH RPC endpoint
-    const number = await this._ethProvider.getBlockNumber();
-    const { hash } = await this._ethProvider.getBlock(number);
+    const { number, hash } = await this._ethProvider.getBlock('latest');
 
     return {
       number,

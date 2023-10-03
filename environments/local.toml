@@ -94,7 +94,13 @@
 [upstream]
   [upstream.ethServer]
     gqlApiEndpoint = "http://127.0.0.1:8082/graphql"
-    rpcProviderEndpoint = "http://127.0.0.1:8545"
+    rpcProviderEndpoint = "http://127.0.0.1:8081"
+    rpcProviderMutationEndpoint = "http://127.0.0.1:8545"
+
+    [upstream.ethServer.rpcProviderNitroNode]
+      address = ""
+      multiAddr = ""
+      amount = "5000"
 
   [upstream.cache]
     name = "requests"
