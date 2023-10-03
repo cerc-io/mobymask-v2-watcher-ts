@@ -62,7 +62,7 @@ export const main = async (): Promise<any> => {
 
     // Setup a payment channel with the upstream Nitro node if provided in config
     // Setup the provider to send payment with each request
-    if (rpcProviderNitroNode) {
+    if (rpcProviderNitroNode?.address) {
       nitroPaymentsManager.setupUpstreamPaymentChannel(rpcProviderNitroNode);
 
       setupProviderWithPayments(serverCmd.ethProvider, nitroPaymentsManager, rpcProviderNitroNode.amount);
