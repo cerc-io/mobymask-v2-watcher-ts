@@ -101,7 +101,7 @@
       address = ""
       multiAddr = ""
       amount = "5000"
-      paidRPCMethods = ['eth_getBlockByHash', 'eth_getStorageAt']
+      paidRPCMethods = ["eth_getBlockByHash", "eth_getStorageAt"]
       [upstream.ethServer.nitro.fundingAmounts]
         directFund = ""
         virtualFund = ""
