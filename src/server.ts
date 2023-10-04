@@ -20,10 +20,9 @@ import {
   virtualPaymentAppAddress,
   consensusAppAddress
 } from './nitro-addresses.json';
-import { PaymentsManager, getConfig } from '@cerc-io/util';
+import { PaymentsManager, getConfig, setupProviderWithPayments } from '@cerc-io/util';
 
 import { RatesConfig } from './config';
-import { setupProviderWithPayments } from './payment-utils';
 
 const log = debug('vulcanize:server');
 
@@ -47,7 +46,7 @@ export const main = async (): Promise<any> => {
 
   let nitroPaymentsManager: PaymentsManager | undefined;
   const { enablePeer, peer: { enableL2Txs, l2TxsConfig, pubSubTopic }, nitro: { payments } } = serverCmd.config.server.p2p;
-  const { rpcProviderMutationEndpoint, nitro: rpcProviderNitroConfig } = serverCmd.config.upstream.ethServer;
+  const { rpcProviderMutationEndpoint, payments: ethServerPaymentsConfig } = serverCmd.config.upstream.ethServer;
 
   if (enablePeer) {
     assert(peer);
@@ -62,10 +61,16 @@ export const main = async (): Promise<any> => {
 
     // Setup a payment channel with the upstream Nitro node if provided in config
     // Setup the provider to send payment with each request
-    if (rpcProviderNitroConfig?.address) {
-      nitroPaymentsManager.setupUpstreamPaymentChannel(rpcProviderNitroConfig);
+    if (ethServerPaymentsConfig?.nitro?.address) {
+      const upstreamPaymentChannel = await nitroPaymentsManager.setupPaymentChannel(ethServerPaymentsConfig?.nitro);
 
-      setupProviderWithPayments(serverCmd.ethProvider, nitroPaymentsManager, rpcProviderNitroConfig.paidRPCMethods, rpcProviderNitroConfig.amount);
+      setupProviderWithPayments(
+        serverCmd.ethProvider,
+        nitroPaymentsManager,
+        upstreamPaymentChannel,
+        ethServerPaymentsConfig.paidRPCMethods,
+        ethServerPaymentsConfig.amount
+      );
     }
 
     // Register the pubsub topic handler
