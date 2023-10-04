@@ -69,10 +69,10 @@
           paymentChannelTTLInSecs = 1800
 
     [server.p2p.consensus]
-      enabled = true
+      enabled = false
       publicKey = ''
       privateKey = ''
-      watcherPartyFile = ''
+      watcherPartyPeersFile = ''
 
 [metrics]
   host = "127.0.0.1"
@@ -97,10 +97,17 @@
     rpcProviderEndpoint = "http://127.0.0.1:8081"
     rpcProviderMutationEndpoint = "http://127.0.0.1:8545"
 
-    [upstream.ethServer.rpcProviderNitroNode]
-      address = ""
-      multiAddr = ""
+    [upstream.ethServer.payments]
+      paidRPCMethods = ["eth_getBlockByHash", "eth_getStorageAt"]
       amount = "5000"
+
+      [upstream.ethServer.payments.nitro]
+        address = ""
+        multiAddr = ""
+
+        [upstream.ethServer.payments.nitro.fundingAmounts]
+          directFund = "1000000000000"
+          virtualFund = "1000000000"
 
   [upstream.cache]
     name = "requests"
