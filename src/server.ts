@@ -23,7 +23,7 @@ import {
 import { PaymentsManager, getConfig, setupProviderWithPayments } from '@cerc-io/util';
 
 import { RatesConfig } from './config';
-import { ValidateContract } from './util/validateConfig';
+import { validateContract } from './util/validateConfig';
 const log = debug('vulcanize:server');
 
 export const main = async (): Promise<any> => {
@@ -36,7 +36,7 @@ export const main = async (): Promise<any> => {
   const { rpcProviderMutationEndpoint, payments: ethServerPaymentsConfig } = serverCmd.config.upstream.ethServer;
 
   [nitroAdjudicatorAddress, virtualPaymentAppAddress, consensusAppAddress].forEach((contractAddr) => {
-    ValidateContract(rpcProviderMutationEndpoint, contractAddr);
+    validateContract(rpcProviderMutationEndpoint, contractAddr);
   });
 
   // Initialize / start the Nitro node
