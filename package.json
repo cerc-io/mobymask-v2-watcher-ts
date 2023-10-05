@@ -42,7 +42,7 @@
     "@apollo/client": "^3.3.19",
     "@cerc-io/cli": "^0.2.63",
     "@cerc-io/ipld-eth-client": "^0.2.63",
-    "@cerc-io/nitro-node": "^0.1.11",
+    "@cerc-io/nitro-node": "^0.1.13",
     "@cerc-io/peer": "^0.2.63",
     "@cerc-io/solidity-mapper": "^0.2.63",
     "@cerc-io/util": "^0.2.63",
