@@ -1,10 +1,12 @@
 import { ethers } from 'ethers';
-import debug from 'debug';
+import { Client } from 'pg';
 import axios from 'axios';
+import debug from 'debug';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const log = debug('vulcanize:server');
 
-export async function validateContract (rpcEndpoint: string, contractAddress: string): Promise<void> {
+export async function validateContractDeployment (rpcEndpoint: string, contractAddress: string): Promise<void> {
   const provider = await new ethers.providers.JsonRpcProvider(rpcEndpoint);
   try {
     const code = await provider.getCode(contractAddress);
@@ -23,9 +25,34 @@ export async function validateRPCEndPoint (rpcEndpoint: string): Promise<void> {
     await axios.get(rpcEndpoint);
   } catch (error:any) {
     if (error.code === 'ECONNREFUSED') {
-      throw new Error(`Connection refused at ${rpcEndpoint}. Please check if the RPC endpoint is correct and the server is running.`);
+      log(`WARNING: Connection refused at ${rpcEndpoint}. Please check if the RPC endpoint upstream.ethServer.rpcProviderEndpoint is correct and up.`);
     } else {
       throw error;
     }
+  }
+}
+
+export function validateContractAddressFormat (contractAddress: string): void {
+  if (ethers.utils.isAddress(contractAddress)) {
+    log('Given contract address is in a valid format');
+  } else {
+    log('WARNING: Given contract address is not in a valid format');
+  }
+}
+
+export async function validateDatabaseEndpoint (database: PostgresConnectionOptions): Promise<void> {
+  const connectionString = `${database.type}://${database.username}:${database.password}@${database.host}:${database.port}/${database.database}`;
+
+  const client = new Client({
+    connectionString
+  });
+
+  try {
+    await client.connect();
+    log('PostgreSQL endpoint is up!');
+  } catch (error) {
+    log('WARNING: Error connecting to database. Please check if database config is setup and database is running \n', error);
+  } finally {
+    await client.end();
   }
 }

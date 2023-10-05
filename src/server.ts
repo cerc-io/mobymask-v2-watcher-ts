@@ -23,7 +23,8 @@ import {
 import { PaymentsManager, getConfig, setupProviderWithPayments } from '@cerc-io/util';
 
 import { RatesConfig } from './config';
-import { validateContract, validateRPCEndPoint } from './util/validateConfig';
+import { validateContractAddressFormat, validateContractDeployment, validateDatabaseEndpoint, validateRPCEndPoint } from './util/validateConfig';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 const log = debug('vulcanize:server');
 
 export const main = async (): Promise<any> => {
@@ -34,14 +35,19 @@ export const main = async (): Promise<any> => {
   // Initialize / start the p2p nodes
   const { peer } = await serverCmd.initP2P();
   const { rpcProviderMutationEndpoint, payments: ethServerPaymentsConfig } = serverCmd.config.upstream.ethServer;
-  try {
-    await validateRPCEndPoint(rpcProviderMutationEndpoint);
-  } catch (e) {
-    log(e);
-  }
 
+  // Validate database endpoint
+  const { database } = serverCmd.config;
+
+  await validateDatabaseEndpoint(database as PostgresConnectionOptions);
+
+  // Validate RPC Endpoint
+  await validateRPCEndPoint(rpcProviderMutationEndpoint);
+
+  // Validate contract deployment
   [nitroAdjudicatorAddress, virtualPaymentAppAddress, consensusAppAddress].forEach((contractAddr) => {
-    validateContract(rpcProviderMutationEndpoint, contractAddr);
+    validateContractAddressFormat(contractAddr);
+    validateContractDeployment(rpcProviderMutationEndpoint, contractAddr);
   });
 
   // Initialize / start the Nitro node
