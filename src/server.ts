@@ -23,7 +23,7 @@ import {
 import { PaymentsManager, getConfig, setupProviderWithPayments } from '@cerc-io/util';
 
 import { RatesConfig } from './config';
-import { validateContract } from './util/validateConfig';
+import { validateContract, validateRPCEndPoint } from './util/validateConfig';
 const log = debug('vulcanize:server');
 
 export const main = async (): Promise<any> => {
@@ -34,6 +34,11 @@ export const main = async (): Promise<any> => {
   // Initialize / start the p2p nodes
   const { peer } = await serverCmd.initP2P();
   const { rpcProviderMutationEndpoint, payments: ethServerPaymentsConfig } = serverCmd.config.upstream.ethServer;
+  try {
+    await validateRPCEndPoint(rpcProviderMutationEndpoint);
+  } catch (e) {
+    log(e);
+  }
 
   [nitroAdjudicatorAddress, virtualPaymentAppAddress, consensusAppAddress].forEach((contractAddr) => {
     validateContract(rpcProviderMutationEndpoint, contractAddr);
