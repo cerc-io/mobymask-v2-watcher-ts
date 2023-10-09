@@ -20,21 +20,9 @@ export async function validateContractDeployment (rpcEndpoint: string, contractA
   }
 }
 
-export async function validateRPCEndPoint (rpcEndpoint: string): Promise<void> {
-  try {
-    await axios.get(rpcEndpoint);
-  } catch (error:any) {
-    if (error.code === 'ECONNREFUSED') {
-      log(`WARNING: Connection refused at ${rpcEndpoint}. Please check if the RPC endpoint upstream.ethServer.rpcProviderEndpoint is correct and up.`);
-    } else {
-      throw error;
-    }
-  }
-}
-
 export function validateContractAddressFormat (contractAddress: string): void {
   if (ethers.utils.isAddress(contractAddress)) {
-    log('Given contract address is in a valid format');
+    log('SUCCESS: Given contract address is in a valid format');
   } else {
     log('WARNING: Given contract address is not in a valid format');
   }
@@ -49,10 +37,102 @@ export async function validateDatabaseEndpoint (database: PostgresConnectionOpti
 
   try {
     await client.connect();
-    log('PostgreSQL endpoint is up!');
+    log('SUCCESS: PostgreSQL endpoint is up!');
   } catch (error) {
     log('WARNING: Error connecting to database. Please check if database config is setup and database is running \n', error);
   } finally {
     await client.end();
+  }
+}
+
+export async function validateEndpoints (endPoint: string, kind: string): Promise<void> {
+  try {
+    await axios.get(endPoint);
+    log(`SUCCESS: The ${endPoint} is up`);
+  } catch (error:any) {
+    if (error.code === 'ECONNREFUSED') {
+      log(`WARNING: Connection refused at ${endPoint}. Please check if the ${kind} is correct and up.`);
+    } else {
+      throw error;
+    }
+  }
+}
+
+export async function validateJobQueueEndpoint (connectionString: string): Promise<void> {
+  const client = new Client({
+    connectionString
+  });
+
+  try {
+    await client.connect();
+    log('SUCCESS: Job queue PostgreSQL endpoint is up!');
+  } catch (error) {
+    log('WARNING: Error connecting to job queue database. Please check if job queue config is setup and database is running \n', error);
+  } finally {
+    await client.end();
+  }
+}
+
+async function checkWebSocket (wsEndpoint: string) {
+  const socket = new WebSocket(wsEndpoint);
+
+  return new Promise((resolve, reject) => {
+    socket.addEventListener('open', () => {
+      socket.close();
+      resolve(true);
+    });
+
+    socket.addEventListener('error', (event) => {
+      // eslint-disable-next-line prefer-promise-reject-errors
+      reject(`Error: ${event}`);
+    });
+  });
+}
+
+export async function validateNitroChainUrl (wsEndpoint: string): Promise<void> {
+  try {
+    await checkWebSocket(wsEndpoint);
+    log(`The WebSocket endpoint ${wsEndpoint} is running.`);
+  } catch (error) {
+    log(`WARNING: Error connecting to websocket endpoint ${wsEndpoint}. Please check if server.p2p.nitro.chainUrl is correct.`, error);
+  }
+}
+
+async function isJsonRpcMethod (method: string, url: string): Promise<boolean> {
+  const payload = {
+    jsonrpc: '2.0',
+    method,
+    params: [],
+    id: 1
+  };
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const responseData = await response.json();
+
+  return (
+    responseData &&
+    responseData.jsonrpc === '2.0' &&
+    responseData.result !== undefined &&
+    responseData.error === undefined
+  );
+}
+
+export async function validateRPCMethods (method: string, url: string): Promise<void> {
+  try {
+    const isValid = await isJsonRpcMethod(method, url);
+    if (isValid) {
+      log(`SUCCESS: The method ${method} is a valid JSON RPC method`);
+    } else {
+      log(`WARNING: The method ${method} is not a valid JSON RPC method`);
+    }
+  } catch (error) {
+    console.error(error);
   }
 }
