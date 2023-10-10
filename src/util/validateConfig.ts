@@ -3,6 +3,7 @@ import { Client } from 'pg';
 import axios from 'axios';
 import debug from 'debug';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import WebSocket from 'ws';
 import { VALID_RPC_METHODS } from './constants';
 const log = debug('vulcanize:server');
 
@@ -77,12 +78,12 @@ async function checkWebSocket (wsEndpoint: string) {
   const socket = new WebSocket(wsEndpoint);
 
   return new Promise((resolve, reject) => {
-    socket.addEventListener('open', () => {
+    socket.on('open', () => {
       socket.close();
       resolve(true);
     });
 
-    socket.addEventListener('error', (event) => {
+    socket.on('error', (event) => {
       // eslint-disable-next-line prefer-promise-reject-errors
       reject(`Error: ${event}`);
     });
