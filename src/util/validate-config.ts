@@ -8,7 +8,6 @@ export async function validateConfig (serverCmd: ServerCmd, contractsArr: string
   await validateEthRPCMethods(serverCmd.config.upstream.ethServer.payments.paidRPCMethods);
 
   // Validate database endpoint
-
   await validateDatabaseEndpoint(serverCmd.config.database as PostgresConnectionOptions);
 
   // Validate Nitro chain url
@@ -23,5 +22,5 @@ export async function validateConfig (serverCmd: ServerCmd, contractsArr: string
   await validateJobQueueEndpoint(serverCmd.config.jobQueue.dbConnectionString);
 
   // Validate contract deployment
-  validateContracts(contractsArr, serverCmd.config.upstream.ethServer.rpcProviderEndpoint);
+  await validateContracts(contractsArr, serverCmd.config.upstream.ethServer.rpcProviderEndpoint);
 }
