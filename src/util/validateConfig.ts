@@ -4,7 +4,9 @@ import axios from 'axios';
 import debug from 'debug';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import WebSocket from 'ws';
+
 import { VALID_RPC_METHODS } from './constants';
+
 const log = debug('vulcanize:server');
 
 export async function validateContractDeployment (rpcEndpoint: string, contractAddress: string): Promise<void> {
