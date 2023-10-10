@@ -23,38 +23,23 @@ import {
 import { PaymentsManager, getConfig, setupProviderWithPayments } from '@cerc-io/util';
 
 import { RatesConfig } from './config';
-import { validateContractAddressFormat, validateContractDeployment, validateDatabaseEndpoint, validateEndpoints, validateNitroChainUrl, validateRPCMethods } from './util/validateConfig';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { validateConfig } from './util/validate-config';
 const log = debug('vulcanize:server');
 
 export const main = async (): Promise<any> => {
   const serverCmd = new ServerCmd();
+
+  // Validate config
+  await serverCmd.initConfig();
+  const contractArr = [nitroAdjudicatorAddress, virtualPaymentAppAddress, consensusAppAddress];
+  await validateConfig(serverCmd, contractArr);
+
   await serverCmd.init(Database);
   await serverCmd.initIndexer(Indexer);
 
   // Initialize / start the p2p nodes
   const { peer } = await serverCmd.initP2P();
   const { rpcProviderMutationEndpoint, payments: ethServerPaymentsConfig } = serverCmd.config.upstream.ethServer;
-
-  // Validate JSON RPC Methods
-  serverCmd.config.upstream.ethServer.payments.paidRPCMethods.forEach(async (method) => await validateRPCMethods(method));
-
-  // Validate database endpoint
-  const { database } = serverCmd.config;
-
-  await validateDatabaseEndpoint(database as PostgresConnectionOptions);
-
-  // Validate Nitro chain url
-  await validateNitroChainUrl(serverCmd.config.server.p2p.nitro.chainUrl);
-
-  // Validate endpoints
-  await validateEndpoints(serverCmd.config.upstream.ethServer.rpcProviderMutationEndpoint, 'rpcProviderMutationEndpoint');
-
-  // Validate contract deployment
-  [nitroAdjudicatorAddress, virtualPaymentAppAddress, consensusAppAddress].forEach((contractAddr) => {
-    validateContractAddressFormat(contractAddr);
-    validateContractDeployment(rpcProviderMutationEndpoint, contractAddr);
-  });
 
   // Initialize / start the Nitro node
   const nitro = await serverCmd.initNitro({
