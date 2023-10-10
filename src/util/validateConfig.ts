@@ -3,7 +3,7 @@ import { Client } from 'pg';
 import axios from 'axios';
 import debug from 'debug';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-
+import { VALID_RPC_METHODS } from './constants';
 const log = debug('vulcanize:server');
 
 export async function validateContractDeployment (rpcEndpoint: string, contractAddress: string): Promise<void> {
@@ -98,41 +98,10 @@ export async function validateNitroChainUrl (wsEndpoint: string): Promise<void> 
   }
 }
 
-async function isJsonRpcMethod (method: string, url: string): Promise<boolean> {
-  const payload = {
-    jsonrpc: '2.0',
-    method,
-    params: [],
-    id: 1
-  };
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
-
-  const responseData = await response.json();
-
-  return (
-    responseData &&
-    responseData.jsonrpc === '2.0' &&
-    responseData.result !== undefined &&
-    responseData.error === undefined
-  );
-}
-
-export async function validateRPCMethods (method: string, url: string): Promise<void> {
-  try {
-    const isValid = await isJsonRpcMethod(method, url);
-    if (isValid) {
-      log(`SUCCESS: The method ${method} is a valid JSON RPC method`);
-    } else {
-      log(`WARNING: The method ${method} is not a valid JSON RPC method`);
-    }
-  } catch (error) {
-    console.error(error);
+export async function validateRPCMethods (method: string): Promise<void> {
+  if (VALID_RPC_METHODS.includes(method)) {
+    log(`SUCESS: ${method} is a valid JsonRpcMethod`);
+  } else {
+    log(`WARNING: ${method} is not a valid JsonRpcMethod`);
   }
 }
