@@ -31,8 +31,8 @@ export const main = async (): Promise<any> => {
 
   // Validate config
   await serverCmd.initConfig();
-  const contractArr = [nitroAdjudicatorAddress, virtualPaymentAppAddress, consensusAppAddress];
-  await validateConfig(serverCmd, contractArr);
+  const nitroContractsArr = [{ address: nitroAdjudicatorAddress, name: 'nitro adjudicator address' }, { address: virtualPaymentAppAddress, name: 'virtual payment app address' }, { address: consensusAppAddress, name: 'consensus app address' }];
+  await validateConfig(serverCmd, nitroContractsArr);
 
   await serverCmd.init(Database);
   await serverCmd.initIndexer(Indexer);
