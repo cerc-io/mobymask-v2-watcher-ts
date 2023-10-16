@@ -28,11 +28,13 @@ const log = debug('vulcanize:server');
 
 export const main = async (): Promise<any> => {
   const serverCmd = new ServerCmd();
+  await serverCmd.initConfig();
 
   // Validate config
-  await serverCmd.initConfig();
-  const nitroContractsArr = [{ address: nitroAdjudicatorAddress, name: 'nitro adjudicator address' }, { address: virtualPaymentAppAddress, name: 'virtual payment app address' }, { address: consensusAppAddress, name: 'consensus app address' }];
-  await validateConfig(serverCmd, nitroContractsArr);
+  if (serverCmd.config.server.enableValidation) {
+    const nitroContractsArr = [{ address: nitroAdjudicatorAddress, name: 'nitro adjudicator address' }, { address: virtualPaymentAppAddress, name: 'virtual payment app address' }, { address: consensusAppAddress, name: 'consensus app address' }];
+    await validateConfig(serverCmd, nitroContractsArr);
+  }
 
   await serverCmd.init(Database);
   await serverCmd.initIndexer(Indexer);
