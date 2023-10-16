@@ -32,7 +32,7 @@ export const main = async (): Promise<any> => {
 
   // Validate config
   if (serverCmd.config.server.enableValidation) {
-    const nitroContractsArr = [{ address: nitroAdjudicatorAddress, name: 'nitro adjudicator address' }, { address: virtualPaymentAppAddress, name: 'virtual payment app address' }, { address: consensusAppAddress, name: 'consensus app address' }];
+    const nitroContractsArr = [{ address: nitroAdjudicatorAddress, name: 'NitroAdjudicator' }, { address: virtualPaymentAppAddress, name: 'VirtualPaymentApp' }, { address: consensusAppAddress, name: 'ConsensusApp' }];
     await validateConfig(serverCmd, nitroContractsArr);
   }
 
