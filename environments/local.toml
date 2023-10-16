@@ -4,7 +4,7 @@
   kind = "lazy"
 
   # Enable config validation
-  enableValidation = true
+  enableConfigValidation = true
 
   # Checkpointing state.
   checkpointing = true
