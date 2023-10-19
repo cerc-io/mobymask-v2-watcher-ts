@@ -23,16 +23,29 @@ import {
 import { PaymentsManager, getConfig, setupProviderWithPayments } from '@cerc-io/util';
 
 import { RatesConfig } from './config';
-
+import { validateConfig } from './util/validate-config';
 const log = debug('vulcanize:server');
 
 export const main = async (): Promise<any> => {
   const serverCmd = new ServerCmd();
+  await serverCmd.initConfig();
+
+  // Validate config
+  if (serverCmd.config.server.enableConfigValidation) {
+    const nitroContractsArr = [
+      { address: nitroAdjudicatorAddress, name: 'NitroAdjudicator' },
+      { address: virtualPaymentAppAddress, name: 'VirtualPaymentApp' },
+      { address: consensusAppAddress, name: 'ConsensusApp' }
+    ];
+    await validateConfig(serverCmd, nitroContractsArr);
+  }
+
   await serverCmd.init(Database);
   await serverCmd.initIndexer(Indexer);
 
   // Initialize / start the p2p nodes
   const { peer } = await serverCmd.initP2P();
+  const { rpcProviderMutationEndpoint, payments: ethServerPaymentsConfig } = serverCmd.config.upstream.ethServer;
 
   // Initialize / start the Nitro node
   const nitro = await serverCmd.initNitro({
@@ -46,7 +59,6 @@ export const main = async (): Promise<any> => {
 
   let nitroPaymentsManager: PaymentsManager | undefined;
   const { enablePeer, peer: { enableL2Txs, l2TxsConfig, pubSubTopic }, nitro: { payments } } = serverCmd.config.server.p2p;
-  const { rpcProviderMutationEndpoint, payments: ethServerPaymentsConfig } = serverCmd.config.upstream.ethServer;
 
   if (enablePeer) {
     assert(peer);

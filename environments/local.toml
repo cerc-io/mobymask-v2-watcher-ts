@@ -3,6 +3,9 @@
   port = 3010
   kind = "lazy"
 
+  # Enable config validation
+  enableConfigValidation = true
+
   # Checkpointing state.
   checkpointing = true
 
